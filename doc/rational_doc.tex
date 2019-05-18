@@ -1,0 +1,151 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[magyar]{babel}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\graphicspath{{../img/}}
+\usepackage{hhline}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{anysize}
+
+\marginsize{2.5cm}{2.5cm}{2cm}{2cm}
+
+
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+        \vspace*{1cm}
+ 
+        \Huge
+        \textbf{Racionális szám osztály\\}
+ 
+        \vspace{0.5cm}
+        \Large
+	A dokumentum egy C++ nyelvben íródott, racionális szám osztályt megvalósító header fájl tulajdonságait leíró és készítését			bemutató jegyzőkönyv.
+ 
+        \vspace{1.5cm}
+ 
+        \textbf{ Szokody Márk\\}
+ 
+        \vfill
+
+        \large  
+
+        A leírás a\\
+       \textbf{ Kutatómunka információs eszközei}\\
+        tárgyhoz készült beadandó feladat része.
+ 
+        \vspace{0.8cm}
+ 
+        \includegraphics[width=0.4\textwidth]{elte.eps}
+ 
+        \Large
+        2019.05.18.
+ 
+    \end{center}
+\end{titlepage}
+
+\section{Áttekintés}
+A rational.h fájl egy C++ nyelvhez írt header, mellyel lehetővé válik, hogy a racionális számokat ne lebegőpontosként,
+hanem két integer hányadosaként tároljuk. Így kiküszöbölhetővé válnak a kerekítési hibák, azaz a pontosság javul.
+A megírás során szempont volt a más osztáyokkal való kompatibilitás, így például a racionális osztály példányai eltárolhatók például
+egy mátrixban, velük ilyen formában is végezhető művelet. A racionális szám osztály neve Rational. A header használatához C++ 17 standard megkövetelése szükséges.
+
+\section{Korlátok}
+A számláló és a nevező integer típusban van tárolva, így a legkisebb és legnagyobb eltárolható számnak e típus korlátai szabnak határt. 
+\newline
+Összeadás és kivonás során fellépő esetlges túlcsordulásról a felhasználó kaphat tájékoztatást.
+\newline
+A tört mindig a legegyszerűbb alakban van tárolva, mivel így csökkenthető a túlcsordulás esélye.
+\newline
+A negatív előjelet mindig a számláló hordozza.
+\newline
+Mivel egyes műveletek kivezetnek a racionális számok halmazából, az osztály nem alkalmazható minden esetben a teljes számolásra. 
+
+\section{Az implementált függvények és operátorok}
+\subsection*{Alapvető műveletek}
+Összeadás, kivonás, szorzás, osztás, valamint ezek rövidített változatai(+=, *=, -=, /=). Az összes művelet elvégezhető a Rational osztály pédányai között, valamint Rational osztály pédánya és integer között. Az összeadás és szorzás mindkét esetben asszociatív.
+Két Rational, valamint egy Rational és integer egyenlősége is értelmezve van.
+\subsection*{simplify()}
+Ez a függvény nem public, hanem private. Elvégzi a tört egyszerűsítését a Standard Library gcd függvénye segítségével, illetve rendezi az előjeleket:
+\begin{enumerate}
+  \item Ha a számláló és a nevező is negatív, mindkettőnek veszi az ellentettjét.
+  \item  Ha a számláló pozitív és a nevező negatív, mindkettőnek veszi az ellentettjét.
+  \item  Egyéb esetben változatlanul hagyja az előjeleket.
+\end{enumerate}
+\noindent
+ A konstruktorok és az alapvető operátorok mind meghívják ezt a függvényt, így biztosítható, hogy a számok a megfelelő alakban legyenek tárolva.
+
+\subsection*{read\_num()}
+Visszaadja a számlálót (int) konstans referenciaként.
+
+\subsection*{read\_den()}
+Visszaadja a nevezőt (int) konstans referenciaként.
+
+\subsection*{rec()}
+Visszaadja a tört reciprokát (Rational) konstans referenciaként.
+
+\subsection*{inv()}
+Felcseréli a számlálót és nevezőt a Standard Library swap függvénye segítségével. 
+
+\subsection*{double\_val()}
+Visszaadja a tört értékét double típussal, konstans referenciaként.
+
+\subsection*{spec\_sqrt()}
+Visszaadja a tört gyökét, ha lehetséges Rational alakban, ha nem akkor double típusal, a Standard Library-ban lévő variant (C++17)  segítségével. Ha a tört negatív, \\domain\_error típusú stadard hibát jelent.
+
+\subsection*{Összehasonlító operátorok}
+Globális definíció az == és a < operátorokra. A további összehasonlítást végző operátorhoz az Standard Library rel\_ops névterének használatával juthatunk hozzá.
+
+\subsection*{sqrt(Rational const\&)}
+Globálisan definiált függvény. Visszaadja a tört gyökét double típussal. Ha a tört negatív, domain\_error típusú stadard hibát jelent.
+
+\subsection*{newton\_sqrt(double, double, int, double)}
+Globálisan definiált függvény. Visszaadja a tört gyökének közelítő értékét double típussal. Ha a tört negatív, domain\_error típusú stadard hibát jelent.
+
+\subsection*{pow(Rational const\& , int const\&)}
+Globálisan definiált függvény. Visszaadja a tört integer paraméterrel megadott hatványát Rational típussal. A Standard Library pow() függvényét használja. Ha a számláló vagy nevező túlcsordulna, overflow\_error típusú stadard hibát jelent.
+
+\subsection*{pow(Rational const\& , double const\&)}
+Globálisan definiált függvény. Visszaadja a tört double paraméterrel megadott hatványát double típussal. A Standard Library pow() függvényét használja.
+
+\subsection*{abs(Rational const\&)}
+Globálisan definiált függvény. Visszaadja a tört abszolút értékét Rational típussal, a Standard Library abs() függvényének segítségével.
+
+\subsection*{Stream operátorok}
+A << operátor kiírja a streambe a Rational típust "számláló/nevező " formátumban. A >> operátorral lehetővé válik Rational típus beolvasása megfelelő formátum esetén.
+
+\section{Exceptionok}
+\begin{enumerate}
+  \item Inicializálásnál, ha a nevező nulla: \\std::domain\_error\{"Exception: zero denominator"\}
+  \item Összeadásnál és kivonásnál túlcsordulás esetén:\\ std::overflow\_error\{"Exception: int overflow"\}
+  \item Nullával való osztásnál: \\std::domain\_error\{"Exception: division by zero"\}
+  \item Gyökvonásnál, ha a szám negatív: \\std::domain\_error\{"Exception: result is complex"\}
+  \item Hatványozásnál túlcsordulás esetén: \\std::overflow\_error\{"Exception: int overflow"\}
+\end{enumerate}
+
+\section{Az elkészítés menete}
+\ Az implementáció eredetileg a Haladó Alkalmazott Programozás nevű tárgyhoz készült.
+A feladatban szerepelt, hogy az osztály legyen használható a Vector2 és Mátrixosztállyal, melyek a tárgy keretei között korábban megírt header fájlok.
+\newline
+\newline
+\indent A programkód megírása során folyamatosan ellenőriztem, a kódrészletek működését.
+Először egy kezdetleges verziót készítettem, mely tartalmazta a konstruktorokat, a számláló és nevező kiolvasására szolgáló függvényket és private elemként a számlálót és nevezőt reprezetnáló integereket, valamint az egyszerűsítésre használt simplify() függvényt. 
+\\
+\indent A második változatban implementáltam az alapvető operátorokat és definiáltam a tárolt szám double formátumú értékét visszaadó függvényt, majd a reciprok, hatvány és gyökvonás függvényekkel bővítettem a kódot.
+\\
+\indent Ezek után implemetálásra kerültek az összehasonlító és a stream operátorok.
+\\
+\indent A fejlesztés utolsó szakasza a hibák keresésével és kijavításával telt. Ehhez kikértem a tárgyat tartó oktató véleményét, majd alkalmaztam a javaslatait. Továbbá a feladatnak megfelelően létrehoztam egy Newton iterációval működő, közelítő gyökszámolást elvégző függvényt. A main.cpp tartalmazza a függvények és operátorok tesztjeit, melyek kitérnek az előjelek estleges hibás kezeléséből adódó lehetőségekre is.
+Helyes lefutásakor 5 sornyi üzenet jelenik meg, kétszer egy exceptiont és kezelését jelző üzenetpár, valamint egy, a tesztelés végét 
+jelző mondat.
+
+\section{Kiegésztés}
+A C++20-tól elérhető a Standard Library-ben a concepts, melynek segítségével általánosítani lehet a típust, ezáltal választani lehetne int vagy long típusok között.
+
+\end{document}
