@@ -53,13 +53,13 @@
 \section{Áttekintés}
 A rational.h fájl egy C++ nyelvhez írt header, mellyel lehetővé válik, hogy a racionális számokat ne lebegőpontosként,
 hanem két integer hányadosaként tároljuk. Így kiküszöbölhetővé válnak a kerekítési hibák, azaz a pontosság javul.
-A megírás során szempont volt a más osztáyokkal való kompatibilitás, így például a racionális osztály példányai eltárolhatók például
+A megírás során szempont volt a más osztályokkal való kompatibilitás, így például a racionális osztály példányai eltárolhatók például
 egy mátrixban, velük ilyen formában is végezhető művelet. A racionális szám osztály neve Rational. A header használatához C++ 17 standard megkövetelése szükséges.
 
 \section{Korlátok}
 A számláló és a nevező integer típusban van tárolva, így a legkisebb és legnagyobb eltárolható számnak e típus korlátai szabnak határt. 
 \newline
-Összeadás és kivonás során fellépő esetlges túlcsordulásról a felhasználó kaphat tájékoztatást.
+Összeadás és kivonás során fellépő esetleges túlcsordulásról a felhasználó kaphat tájékoztatást.
 \newline
 A tört mindig a legegyszerűbb alakban van tárolva, mivel így csökkenthető a túlcsordulás esélye.
 \newline
@@ -69,7 +69,7 @@ Mivel egyes műveletek kivezetnek a racionális számok halmazából, az osztál
 
 \section{Az implementált függvények és operátorok}
 \subsection*{Alapvető műveletek}
-Összeadás, kivonás, szorzás, osztás, valamint ezek rövidített változatai(+=, *=, -=, /=). Az összes művelet elvégezhető a Rational osztály pédányai között, valamint Rational osztály pédánya és integer között. Az összeadás és szorzás mindkét esetben asszociatív.
+Összeadás, kivonás, szorzás, osztás, valamint ezek rövidített változatai(+=, *=, -=, /=). Az összes művelet elvégezhető a Rational osztály példányai között, valamint Rational osztály példánya és integer között. Az összeadás és szorzás mindkét esetben asszociatív.
 Két Rational, valamint egy Rational és integer egyenlősége is értelmezve van.
 \subsection*{simplify()}
 Ez a függvény nem public, hanem private. Elvégzi a tört egyszerűsítését a Standard Library gcd függvénye segítségével, illetve rendezi az előjeleket:
@@ -97,19 +97,19 @@ Felcseréli a számlálót és nevezőt a Standard Library swap függvénye seg�
 Visszaadja a tört értékét double típussal, konstans referenciaként.
 
 \subsection*{spec\_sqrt()}
-Visszaadja a tört gyökét, ha lehetséges Rational alakban, ha nem akkor double típusal, a Standard Library-ban lévő variant (C++17)  segítségével. Ha a tört negatív, \\domain\_error típusú stadard hibát jelent.
+Visszaadja a tört gyökét, ha lehetséges Rational alakban, ha nem akkor double típussal, a Standard Library-ban lévő variant (C++17)  segítségével. Ha a tört negatív, \\domain\_error típusú standard hibát jelent.
 
 \subsection*{Összehasonlító operátorok}
 Globális definíció az == és a < operátorokra. A további összehasonlítást végző operátorhoz az Standard Library rel\_ops névterének használatával juthatunk hozzá.
 
 \subsection*{sqrt(Rational const\&)}
-Globálisan definiált függvény. Visszaadja a tört gyökét double típussal. Ha a tört negatív, domain\_error típusú stadard hibát jelent.
+Globálisan definiált függvény. Visszaadja a tört gyökét double típussal. Ha a tört negatív, domain\_error típusú standard hibát jelent.
 
 \subsection*{newton\_sqrt(double, double, int, double)}
-Globálisan definiált függvény. Visszaadja a tört gyökének közelítő értékét double típussal. Ha a tört negatív, domain\_error típusú stadard hibát jelent.
+Globálisan definiált függvény. Visszaadja a tört gyökének közelítő értékét double típussal. Ha a tört negatív, domain\_error típusú standard hibát jelent.
 
 \subsection*{pow(Rational const\& , int const\&)}
-Globálisan definiált függvény. Visszaadja a tört integer paraméterrel megadott hatványát Rational típussal. A Standard Library pow() függvényét használja. Ha a számláló vagy nevező túlcsordulna, overflow\_error típusú stadard hibát jelent.
+Globálisan definiált függvény. Visszaadja a tört integer paraméterrel megadott hatványát Rational típussal. A Standard Library pow() függvényét használja. Ha a számláló vagy nevező túlcsordulna, overflow\_error típusú standard hibát jelent.
 
 \subsection*{pow(Rational const\& , double const\&)}
 Globálisan definiált függvény. Visszaadja a tört double paraméterrel megadott hatványát double típussal. A Standard Library pow() függvényét használja.
@@ -135,11 +135,11 @@ A feladatban szerepelt, hogy az osztály legyen használható a Vector2 és Mát
 \newline
 \newline
 \indent A programkód megírása során folyamatosan ellenőriztem, a kódrészletek működését.
-Először egy kezdetleges verziót készítettem, mely tartalmazta a konstruktorokat, a számláló és nevező kiolvasására szolgáló függvényket és private elemként a számlálót és nevezőt reprezetnáló integereket, valamint az egyszerűsítésre használt simplify() függvényt. 
+Először egy kezdetleges verziót készítettem, mely tartalmazta a konstruktorokat, a számláló és nevező kiolvasására szolgáló függvényeket és private elemként a számlálót és nevezőt reprezentáló integereket, valamint az egyszerűsítésre használt simplify() függvényt. 
 \\
 \indent A második változatban implementáltam az alapvető operátorokat és definiáltam a tárolt szám double formátumú értékét visszaadó függvényt, majd a reciprok, hatvány és gyökvonás függvényekkel bővítettem a kódot.
 \\
-\indent Ezek után implemetálásra kerültek az összehasonlító és a stream operátorok.
+\indent Ezek után implementálásra kerültek az összehasonlító és a stream operátorok.
 \\
 \indent A fejlesztés utolsó szakasza a hibák keresésével és kijavításával telt. Ehhez kikértem a tárgyat tartó oktató véleményét, majd alkalmaztam a javaslatait. Továbbá a feladatnak megfelelően létrehoztam egy Newton iterációval működő, közelítő gyökszámolást elvégző függvényt. A main.cpp tartalmazza a függvények és operátorok tesztjeit, melyek kitérnek az előjelek estleges hibás kezeléséből adódó lehetőségekre is.
 Helyes lefutásakor 5 sornyi üzenet jelenik meg, kétszer egy exceptiont és kezelését jelző üzenetpár, valamint egy, a tesztelés végét 
